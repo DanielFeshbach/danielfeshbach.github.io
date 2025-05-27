@@ -1,0 +1,15 @@
+{% assign honor = include.honor %}
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    <h3 class="archive__item-title" itemprop="headline">
+      {{ honor.title }}
+    </h3>
+    <p class="archive__item-excerpt" itemprop="description">
+      <strong>{{ honor.awarder }}</strong>, {{ honor.date | date: "%B %Y" }}
+      {% if honor.description %}
+        <br>{{ honor.description }}
+      {% endif %}
+    </p>
+  </article>
+</div>
