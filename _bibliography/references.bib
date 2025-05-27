@@ -1,0 +1,82 @@
+@conference{feshbach2025artistic,
+title = {Artistic Non-Inertial Tracer (ANT): an Educational Kit for a 3-Link Origami Slithering Robot},
+author = {Daniel Feshbach and Alex Chi and Eric Huang and Diedra Krieger and Cynthia Sung},
+url = {https://sung.seas.upenn.edu/research/ant/},
+year = {2025},
+date = {2025-06-22},
+urldate = {2025-06-22},
+booktitle = {2025 ASEE Annual Conference and Exposition},
+organization = {American Society for Engineering Education},
+abstract = {The abundance of connections between art and engineering are opportunities to engage artistically inclined students who may not think of themselves as interested in robotics, and to inspire engineering-inclined students to express themselves artistically. This work presents a tool kit and lesson plan for a hands-on introductory robotics activity centering how art and engineering influence each other. The Artistic Non-Inertial Tracer (ANT) is a three-link robot made of
+origami, which contacts the ground through markers that trace patterns as it slithers around. The design is capable of forward, turning, backward, and diagonal motion. Using origami for the body highlights the influence of art on engineering, and the gait traces are a visually interesting output of the engineering. The kit uses inexpensive components totaling about $26/robot USD (servos, origami, and an Arduino Nano) common in hobbyist communities so that learning how to use these components can empower further exploration of actuated art. Our associated lesson plan engages participants in the assembly and control of ANT and contextualizes it within a broader overview of robot system components and the use of origami in engineering. We successfully ran the lesson as a 3-hour outreach workshop at a local arts organization.},
+keywords = {},
+pubstate = {forthcoming},
+tppubtype = {conference}
+}
+
+@conference{feshbach2024kinematicTrees,
+title = {Algorithmic Design of Kinematic Trees Based on CSC Dubins Planning for Link Shapes},
+author = {Daniel Feshbach and Wei-Hsi Chen and Ling Xu and Emil Schaumburg and Isabella Huang and Cynthia Sung},
+url = {https://repository.upenn.edu/handle/20.500.14332/60660
+https://www.algorithmic-robotics.org/papers/43_Algorithmic_Design_of_Kinem.pdf},
+year = {2024},
+date = {2024-10-08},
+urldate = {2024-10-08},
+booktitle = {Workshop on the Algorithmic Foundations of Robotics (WAFR)},
+abstract = {Computational tools for robot design require algorithms moving between several layers of abstraction including task, morphology, kinematics, mechanism shapes, and actuation. In this paper we give a linear-time algorithm mapping from kinematics to mechanism shape for tree-structured linkages. Specifically, we take as input a tree whose nodes are axes of motion (lines which joints rotate about or translate along) along with types and sizes for joints on these axes, and a radius $r$ for a tubular bound on the link shapes. Our algorithm outputs the geometry for a kinematic tree instantiating these specifications such that the neutral configuration has no self-intersection. The algorithm approach is based on understanding the mechanism design problem as a planning problem for link shapes, and arranging the joints along their axes of motion to be appropriately spaced and oriented such that feasible, non-intersecting paths exist linking them. Since link bending is restricted by its tubular radius, this is a Dubins planning problem, and to prove the correctness of our algorithm we also prove a theorem about Dubins paths: if two point-direction pairs are separated by a plane at least $2r$ from each, and the directions each have non-negative dot product with the plane normal, then they are connected by a radius-$r$ CSC Dubins path with turn angles $leq pi$. We implement our design algorithm in code and provide a 3D printed example of a tubular kinematic tree. The results provide an existence proof of tubular-shaped kinematic trees implementing given axes of motion, and could be used as a starting point for further optimization in an automated or algorithm-assisted robot design system.},
+keywords = {},
+pubstate = {published},
+tppubtype = {conference}
+}
+
+@conference{feshbach2024kinegamiPython,
+title = {Kinegami: Open-source Software for Creating Kinematic Chains from Tubular Origami},
+author = {Daniel Feshbach and Wei-Hsi Chen and Daniel E. Koditschek and Cynthia Sung},
+url = {https://github.com/SungRoboticsGroup/KinegamiPython
+https://sung.seas.upenn.edu/research/kinegami/
+https://repository.upenn.edu/handle/20.500.14332/60333},
+year = {2024},
+date = {2024-07-16},
+urldate = {2024-07-16},
+booktitle = {8th International Meeting on Origami in Science, Mathematics, and Education (8OSME)},
+abstract = {Arms, legs, and fingers of animals and robots are all examples of “kinematic chains" - mechanisms with sequences of joints connected by effectively rigid links. Lightweight kinematic chains can be manufactured quickly and cheaply by folding tubes. In recent work [Chen et al. 2022], we demonstrated that origami patterns for kinematic chains with arbitrary numbers of degrees of freedom can be constructed algorithmically from a minimal kinematic specification (axes that joints rotate about or translate along). The work was founded on a catalog of tubular crease patterns for revolute joints (rotation about an axis), prismatic joints (translation along an axis), and links, which compose to form the specified design. With this paper, we release an open-source python implementation of these patterns and algorithms. Users can specify kinematic chains as a sequence of degrees of freedom or by specific joint locations and orientations. Our software uses this information to construct a single crease pattern for the corresponding chain. The software also includes functions to move or delete joints in an existing chain and regenerate the connecting links, and a visualization tool so users can check that the chain can achieve their desired configurations. This paper provides a detailed guide to the code and its usage, including an explanation of our proposed representation for tubular crease patterns. We include a number of examples to illustrate the software’s capabilities and its potential for robot and mechanism design.},
+keywords = {},
+pubstate = {published},
+tppubtype = {conference}
+}
+
+@conference{feshbach2023curvequad,
+title = {CurveQuad: A centimeter-scale origami quadruped that leverages curved creases to self-fold and crawl with one motor},
+author = {Daniel Feshbach and Xuelin Wu and Satviki Vasireddy and Louis Beardell and Bao To and Yuliy Baryshnikov and Cynthia Sung},
+url = {https://www.youtube.com/watch?v=RnSHG5F2Iek&ab_channel=SungRoboticsGroup
+https://sung.seas.upenn.edu/publications/curvequad/},
+doi = {10.1109/IROS55552.2023.10342339},
+year = {2023},
+date = {2023-10-01},
+urldate = {2023-10-01},
+booktitle = {IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+abstract = {We present CurveQuad, a miniature curved origami quadruped that is able to self-fold and unfold, crawl, and steer, all using a single actuator. CurveQuad is designed for planar manufacturing, with parts that attach and stack sequentially on a flat body. The design uses 4 curved creases pulled by 2 pairs of tendons from opposite ends of a link on a 270deg servo. It is 8 cm in the longest direction and weighs 10.9 g. Rotating the horn pulls the tendons inwards to induce folding. Continuing to rotate the horn shears the robot, enabling the robot to shuffle forward while turning in either direction. We experimentally validate the robot’s ability to fold, steer, and unfold by changing the magnitude of horn rotation. We also demonstrate basic feedback control by steering towards a light source from a variety of starting positions and orientations, and swarm aggregation by having 4 robots simultaneously steer towards the light. The results demonstrate the potential of using curved crease origami in self-assembling and deployable robots with complex motions such as locomotion.},
+keywords = {},
+pubstate = {published},
+tppubtype = {conference}
+}
+
+@article{feshbach2021reconfiguring,
+title = {Reconfiguring Non-Convex Holes in Pivoting Modular Cube Robots},
+author = {Daniel Feshbach and Cynthia Sung},
+url = {https://repository.upenn.edu/cis_papers/865/
+https://www.youtube.com/watch?v=IoyFs_K5RNE
+https://github.com/SungRoboticsGroup/PIVOTING-CUBES_cube-reconfiguration},
+doi = {10.1109/LRA.2021.3095030},
+year = {2021},
+date = {2021-07-07},
+urldate = {2021-07-07},
+journal = {IEEE Robotics and Automation Letters},
+volume = {6},
+number = {4},
+pages = {6701-6708},
+abstract = {We present an algorithm for self-reconfiguration of admissible 3D configurations of pivoting modular cube robots with holes of arbitrary shape and number. Cube modules move across the surface of configurations by pivoting about shared edges, enabling configurations to reshape themselves. Previous work provides a reconfiguration algorithm for admissible 3D configurations containing no non-convex holes; we improve upon this by handling arbitrary admissible 3D configurations. The key insight specifies a point in the deconstruction of layers enclosing non-convex holes at which we can pause and move inner modules out of the hole. We prove this happens early enough to maintain connectivity, but late enough to open enough room in the enclosing layer for modules to escape the hole. Our algorithm gives reconfiguration plans with O(n^2) moves for n modules.},
+keywords = {},
+pubstate = {published},
+tppubtype = {article}
+}

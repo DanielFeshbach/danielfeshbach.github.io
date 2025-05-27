@@ -14,29 +14,33 @@
 
 <div class="{{ include.type | default: "list" }}__item">
   <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
-    <li>
-    {% if include.type == "grid" and teaser %}
-      <div class="archive__item-teaser">
-        <img src=
-          {% if teaser contains "://" %}
-            "{{ teaser }}"
-          {% else %}
-            "{{ teaser | prepend: "/images/" | prepend: base_path }}"
-          {% endif %}
-          alt="">
-      </div>
-    {% endif %}
-    <h3 class="archive__item-title" itemprop="headline">
-      {% if post.link %}
-        <a href="{{ post.link }}">{{ title }}</a> <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
-      {% else %}
-        <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
+    <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 1em;">
+      {% if teaser %}
+        <div class="archive__item-teaser" style="flex-shrink: 0;">
+          <img src=
+            {% if teaser contains "://" %}
+              "{{ teaser }}"
+            {% else %}
+              "{{ teaser | prepend: "/images/" | prepend: base_path }}"
+            {% endif %}
+            alt="{{ title | default: post.title }}" style="width: 120px; height: auto;">
+        </div>
       {% endif %}
-    </h3>
-    {% if post.read_time %}
-      <p class="page__meta"><i class="fa fa-clock" aria-hidden="true"></i> {% include read-time.html %}</p>
-    {% endif %}
-    {% if post.venue%}<p class="archive__item-excerpt" itemprop="description">{{ post.citation }}</p> {% endif %}
-    </li>
- </article>
+      
+      <div class="archive__item-content" style="flex-grow: 1;">
+        <h3 style="margin: 0 0 0.5em 0;">
+          {% if post.url %}
+            <a href="{{ base_path }}{{ post.url }}" rel="permalink">{{ title }}</a>
+          {% else %}
+            {{ title }}
+          {% endif %}
+        </h3>
+        
+        {% if post.authors %}<p style="margin: 0.2em 0;">{{ post.authors }}</p>{% endif %}
+        <p style="margin: 0.2em 0;">
+          {% if post.venue %}{{ post.venue }}{% endif %}{% if post.venue and post.date %}, {% endif %}{% if post.date %}{{ post.date | date: "%Y" }}{% endif %}
+        </p>
+      </div>
+    </div>
+  </article>
 </div>
