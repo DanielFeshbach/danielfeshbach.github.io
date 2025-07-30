@@ -41,14 +41,16 @@
     "vendor/font-awesome/brands",
     "vendor/magnific-popup/magnific-popup"
 ;
+
 /* Custom styles for publication metadata */
 .publication-meta {
   font-size: 1.0em;
 }
 
 .key-text {
-  font-size: 1.3em !important;
-  font-weight: bold;
+  font-size: 1.25em !important;
+  font-weight: bold !important;
+  color: inherit;
 }
 
 .larger-text {
