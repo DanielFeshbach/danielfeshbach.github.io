@@ -45,3 +45,35 @@
 .publication-meta {
   font-size: 1.0em;
 }
+
+.key-text {
+  font-size: 1.3em !important;
+  font-weight: bold;
+}
+
+.larger-text {
+  font-size: 1.5em;
+}
+
+.huge-text {
+  font-size: 2em;
+}
+
+/* Compact lists for CV and other pages */
+.page__content ul li {
+  margin-bottom: 0.2em;
+}
+
+.page__content ul {
+  margin-bottom: 1em;
+}
+
+/* More compact list style for specific use */
+.cv-compact-list li {
+  margin-bottom: 0.1em;
+  line-height: 1.3;
+}
+
+.cv-compact-list {
+  margin-bottom: 0.8em;
+}

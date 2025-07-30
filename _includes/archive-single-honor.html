@@ -6,7 +6,12 @@
       {{ honor.title }}
     </h3>
     <p class="archive__item-excerpt" itemprop="description">
-      <strong>{{ honor.awarder }}</strong>, {{ honor.date | date: "%B %Y" }}
+      <strong>{{ honor.awarder }}</strong>, 
+      {% if honor.award_dates %}
+        {{ honor.award_dates }}
+      {% else %}
+        {{ honor.date | date: "%B %Y" }}
+      {% endif %}
       {% if honor.description %}
         <br>{{ honor.description }}
       {% endif %}

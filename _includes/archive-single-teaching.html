@@ -1,0 +1,47 @@
+{% include base_path %}
+
+{% if post.header.teaser %}
+  {% capture teaser %}{{ post.header.teaser }}{% endcapture %}
+{% else %}
+  {% assign teaser = site.teaser %}
+{% endif %}
+
+{% if post.id %}
+  {% assign title = post.title | markdownify | remove: "<p>" | remove: "</p>" %}
+{% else %}
+  {% assign title = post.title %}
+{% endif %}
+
+<div class="{{ include.type | default: "list" }}__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 1em;">
+      {% if teaser %}
+        <div class="archive__item-teaser" style="flex-shrink: 0;">
+          <img src=
+            {% if teaser contains "://" %}
+              "{{ teaser }}"
+            {% else %}
+              "{{ teaser | prepend: "/images/" | prepend: base_path }}"
+            {% endif %}
+            alt="{{ title | default: post.title }}" style="width: 300px; height: auto;">
+        </div>
+      {% endif %}
+      <div class="archive__item-content" style="flex-grow: 1;">
+        <h2 class="archive__item-title" itemprop="headline" style="margin: 0 0 0.3em 0;">{{ title }}</h2>
+        {% if post.job_title %}<p style="margin: 0.1em 0; line-height: 1.2;">{{ post.job_title }}</p>{% endif %}
+        {% if post.venue %}<p style="margin: 0.1em 0; line-height: 1.2;">{{ post.venue }}</p>{% endif %}
+        {% if post.year %}
+          <p style="margin: 0.1em 0; line-height: 1.2;">
+            {% if post.start_year %}
+              {{ post.start_year }}-{{ post.year }}
+            {% else %}
+              {{ post.semester }} {{ post.year }}
+            {% endif %}
+          </p>
+        {% elsif post.date %}
+          <p style="margin: 0.1em 0; line-height: 1.2;">{{ post.date | date: "%B %Y" }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </article>
+</div>

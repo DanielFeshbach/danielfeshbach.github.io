@@ -38,7 +38,13 @@
         
         {% if post.authors %}<p style="margin: 0.2em 0;">{{ post.authors }}</p>{% endif %}
         <p style="margin: 0.2em 0;">
-          {% if post.venue %}{{ post.venue }}{% endif %}{% if post.venue and post.date %}, {% endif %}{% if post.date %}{{ post.date | date: "%Y" }}{% endif %}
+          {% if post.venue %}{{ post.venue }}{% endif %}
+          {% if post.venue and (post.date or post.semester or post.year) %}, {% endif %}
+          {% if post.semester and post.year %}
+            {{ post.semester }} {{ post.year }}
+          {% elsif post.date %}
+            {{ post.date | date: "%Y" }}
+          {% endif %}
         </p>
       </div>
     </div>
