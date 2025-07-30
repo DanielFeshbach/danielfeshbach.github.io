@@ -47,10 +47,12 @@
   font-size: 1.0em;
 }
 
-.key-text {
+/* Key text styling - more specific selector to override theme defaults */
+.page__content .key-text,
+.page__content p.key-text {
   font-size: 1.25em !important;
   font-weight: bold !important;
-  color: inherit;
+  color: inherit !important;
 }
 
 .larger-text {
