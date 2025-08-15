@@ -1,0 +1,76 @@
+---
+layout: default
+title: "Media"
+permalink: /media/
+classes: media-page
+hide_captions: false
+---
+
+<style>
+  /* Force card borders with maximum specificity */
+  .media-page .media-card {
+    min-width: 0 !important;
+    background: #fff !important;
+    border: 3px solid #333 !important;
+    border-radius: 8px !important;
+    padding: 1rem !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Tighter spacing between elements */
+  .media-page .media-card h3 { margin: 0.1rem 0 0.25rem; font-size: 1rem; }
+  .media-page .publication-meta { margin: 0 0 0.1rem !important; color: #666; font-size: 0.9rem; }
+  .media-page .media-summary { margin-top: 0.25rem; }
+  
+  /* Teaser image styling */
+  .media-page .media-card .teaser-image {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+</style>
+
+<h1>Media</h1>
+
+<section class="media-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:.75rem;align-items:start;">
+  {% assign media_items = site.media | sort: "date" | reverse %}
+  {% for item in media_items %}
+    <article class="media-card" style="border: 2px solid #ccc !important; background: #fff !important; padding: 1rem !important; border-radius: 8px !important; box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;">
+      
+      {% if item.date %}
+        <p class="publication-meta" style="margin: 0 0 0.1rem !important;">
+          <time datetime="{{ item.date | date_to_xmlschema }}">{{ item.date | date: "%B %Y" }}</time>
+        </p>
+      {% endif %}
+
+      <h3 class="archive__item-title" style="margin: 0.1rem 0 0.25rem !important;">
+        {% if item.link %}<a href="{{ item.link }}">{{ item.title }}</a>{% else %}{{ item.title }}{% endif %}
+      </h3>
+
+      {% if item.summary or item.excerpt %}
+        <div class="media-summary">{{ item.summary | default: item.excerpt | markdownify }}</div>
+      {% endif %}
+
+      {% if item.header.teaser %}
+        <img src="{{ site.baseurl }}/images/{{ item.header.teaser }}" alt="{{ item.title }}" class="teaser-image">
+      {% endif %}
+
+      <div class="media-embed">
+        {% if page.hide_captions %}
+          {{ item.content | replace: 'data-instgrm-captioned', '' }}
+        {% else %}
+          {{ item.content }}
+        {% endif %}
+      </div>
+    </article>
+  {% endfor %}
+</section>
+
+<script async src="https://www.instagram.com/embed.js"></script>
+<script>
+  window.addEventListener('load', function () {
+    if (window.instgrm && instgrm.Embeds) { instgrm.Embeds.process(); }
+  });
+</script>

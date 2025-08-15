@@ -81,3 +81,127 @@
 .cv-compact-list {
   margin-bottom: 0.8em;
 }
+
+/* Clamp Instagram embeds by height on Media page */
+.media-page .embed-clamp {
+  max-height: 220px;        /* adjust as needed */
+  overflow: hidden;         /* clip the rest */
+  position: relative;
+}
+
+/* Ensure the blockquote/iframe don’t force width/spacing */
+.media-page .embed-clamp > blockquote.instagram-media {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  margin: 0.5em auto !important;
+}
+
+/* The iframe is injected by embed.js; keep it within the clamp */
+.media-page .embed-clamp iframe[src*="instagram.com"] {
+  display: block;
+  width: 100% !important;
+  height: auto !important;  /* let it grow; wrapper clips */
+}
+
+/* Control Instagram embed size via wrapper width (height scales with width) */
+.media-page .embed-wrap {
+  width: 100%;
+  max-width: 360px; /* default; can be overridden per item via inline style */
+  margin: 0.5em 0;
+}
+
+/* Ensure embedded elements fill the wrapper width */
+.media-page .embed-wrap .instagram-media,
+.media-page .embed-wrap iframe[src*="instagram.com"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block;
+}
+
+/* Limit only Instagram embeds; text remains full width */
+.media-page .archive__item .instagram-media,
+.media-page .archive__item iframe[src*="instagram.com"] {
+  display: block;
+  width: min(100%, var(--ig-max-width, 360px)) !important;
+  max-width: var(--ig-max-width, 360px) !important;
+  margin: 0.5em auto;
+}
+
+/* Ensure inner iframe fills the constrained container */
+.media-page .archive__item .instagram-media iframe {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto;
+}
+
+/* Grid that shows multiple entries without vertical scrolling */
+.media-page .media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* was 340px */
+  gap: 0.75rem; /* was 1rem */
+  align-items: start;
+}
+
+/* Optional: force 2/3 columns at common desktop widths */
+@media (min-width: 900px) {
+  .media-page .media-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1300px) {
+  .media-page .media-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Card */
+.media-page .media-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Instagram embed fills card width; captions removed via template for compactness */
+.media-page .media-card .media-embed {
+  width: 100%;
+}
+
+/* Tame Instagram’s default min/max widths so embeds fit grid columns */
+.media-page .media-card .media-embed .instagram-media,
+.media-page .media-card .media-embed iframe[src*="instagram.com"] {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+/* Ensure inner iframe stretches to container */
+.media-page .media-card .media-embed .instagram-media iframe {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto;
+}
+
+/* Always apply to the media grid */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* narrower cards */
+  gap: 0.75rem;
+}
+
+/* Force multi-column at desktop widths */
+@media (min-width: 900px) {
+  .media-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1300px) {
+  .media-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Let grid items shrink */
+.media-card { min-width: 0; }
+
+/* Prevent Instagram CSS from enforcing a large min-width */
+.media-card .media-embed,
+.media-card .media-embed .instagram-media,
+.media-card .media-embed iframe[src*="instagram.com"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
