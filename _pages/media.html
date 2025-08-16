@@ -120,13 +120,37 @@ hide_captions: false
 </section>
 
 <script>
+var lastHeights = [];
+var masonryAttempts = 0;
+var isStable = false;
+
 function applyMasonry() {
   var grid = document.querySelector('.media-grid');
   var items = grid.querySelectorAll('.media-card');
   
   var rowHeight = 20; // Match CSS grid-auto-rows
   var verticalGap = 1; // Match CSS row-gap
-  var horizontalGap = 20; // Match CSS column-gap (not used in calculation)
+  
+  masonryAttempts++;
+  
+  // Check current heights first
+  var currentHeights = [];
+  for (var i = 0; i < items.length; i++) {
+    var rect = items[i].getBoundingClientRect();
+    currentHeights.push(rect.height);
+  }
+  
+  // Only proceed if heights have changed or this is the first run
+  var heightsChanged = JSON.stringify(currentHeights) !== JSON.stringify(lastHeights);
+  
+  if (!heightsChanged && masonryAttempts > 1) {
+    if (!isStable) {
+      isStable = true; // Mark as stable, stop periodic checks
+    }
+    return; // No need to recalculate
+  }
+  
+  lastHeights = currentHeights.slice();
   
   // Reset all items first
   for (var i = 0; i < items.length; i++) {
@@ -136,39 +160,51 @@ function applyMasonry() {
   // Force reflow
   grid.offsetHeight;
   
-  // Calculate spans
+  // Wait for content to settle, then calculate
   setTimeout(function() {
     for (var i = 0; i < items.length; i++) {
       var rect = items[i].getBoundingClientRect();
       var itemHeight = rect.height;
       
-      // Only use vertical gap in calculation since that's what affects row spans
       var rowSpan = Math.ceil((itemHeight + verticalGap) / rowHeight);
-      
       items[i].style.gridRowEnd = 'span ' + rowSpan;
     }
   }, 100);
 }
 
-// Apply masonry multiple times to handle loading content
+// Initial load timing - less aggressive
 setTimeout(applyMasonry, 500);
 setTimeout(applyMasonry, 1500);
 setTimeout(applyMasonry, 3000);
-setTimeout(applyMasonry, 5000);
+setTimeout(applyMasonry, 6000);
 
 window.addEventListener('resize', function() {
-  setTimeout(applyMasonry, 200);
+  isStable = false; // Reset stability on resize
+  setTimeout(applyMasonry, 300);
 });
 
 // Handle Instagram embeds
-if (window.instgrm) {
-  setTimeout(function() {
-    if (window.instgrm.Embeds) {
-      window.instgrm.Embeds.process();
-      setTimeout(applyMasonry, 2000);
-    }
-  }, 1000);
+function handleInstagramEmbeds() {
+  if (window.instgrm && window.instgrm.Embeds) {
+    window.instgrm.Embeds.process();
+    setTimeout(function() {
+      isStable = false; // Reset stability when Instagram loads
+      applyMasonry();
+    }, 2000);
+  }
 }
+
+setTimeout(handleInstagramEmbeds, 2000);
+setTimeout(handleInstagramEmbeds, 5000);
+
+// Only check periodically if not stable, and less frequently
+var periodicCheck = setInterval(function() {
+  if (!isStable && masonryAttempts < 20) {
+    applyMasonry();
+  } else {
+    clearInterval(periodicCheck);
+  }
+}, 5000); // Every 5 seconds instead of 2
 </script>
 
 <script async src="https://www.instagram.com/embed.js"></script>
