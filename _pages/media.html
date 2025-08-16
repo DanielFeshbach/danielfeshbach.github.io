@@ -81,7 +81,7 @@ hide_captions: false
     margin-bottom: 0.5rem !important;
   }
 
-  /* Production debugging - remove after fixing */
+  /* Production debugging */
   .debug-info {
     position: fixed;
     top: 10px;
@@ -98,10 +98,7 @@ hide_captions: false
 
 <h1>Media</h1>
 
-<!-- Debug info for production -->
-<div class="debug-info" id="debug-info">
-  HTML loaded
-</div>
+<div class="debug-info" id="debug-info">HTML loaded</div>
 
 <section class="media-grid">
   {% assign media_items = site.media | sort: "date" | reverse %}
@@ -137,73 +134,38 @@ hide_captions: false
   {% endfor %}
 </section>
 
+<!-- Minimal test script -->
 <script>
-(function() {
-  var debug = document.getElementById('debug-info');
+document.getElementById('debug-info').innerHTML = 'JS executing';
+document.getElementById('debug-info').style.background = 'rgba(0,255,0,0.9)';
+
+setTimeout(function() {
+  var grid = document.querySelector('.media-grid');
+  var items = grid.querySelectorAll('.media-card');
   
-  function updateDebug(message) {
-    if (debug) {
-      debug.innerHTML = message + '<br>Time: ' + new Date().toLocaleTimeString();
-      debug.style.background = 'rgba(0,255,0,0.9)'; // Green when working
-    }
+  document.getElementById('debug-info').innerHTML = 'Found ' + items.length + ' items';
+  
+  for (var i = 0; i < items.length; i++) {
+    var rect = items[i].getBoundingClientRect();
+    var rowSpan = Math.ceil((rect.height + 12) / 10);
+    items[i].style.gridRowEnd = 'span ' + Math.max(1, rowSpan);
   }
+  
+  document.getElementById('debug-info').innerHTML = 'Masonry applied';
+}, 1000);
 
-  updateDebug('JavaScript executing');
-
-  function masonryLayout() {
-    var grid = document.querySelector('.media-grid');
-    if (!grid) {
-      updateDebug('ERROR: Grid not found');
-      return;
-    }
-    
-    var items = grid.querySelectorAll('.media-card');
-    updateDebug('Processing ' + items.length + ' cards');
-    
-    var rowHeight = 10;
-    var gap = 12;
-    
-    // Reset all items
-    for (var i = 0; i < items.length; i++) {
-      items[i].style.gridRowEnd = 'auto';
-    }
-    
-    // Force reflow
-    grid.offsetHeight;
-    
-    // Apply masonry
-    for (var i = 0; i < items.length; i++) {
-      var rect = items[i].getBoundingClientRect();
-      var itemHeight = rect.height;
-      var rowSpan = Math.ceil((itemHeight + gap) / (rowHeight + gap));
-      items[i].style.gridRowEnd = 'span ' + Math.max(1, rowSpan);
-    }
-    
-    updateDebug('Masonry layout applied successfully');
+setTimeout(function() {
+  var grid = document.querySelector('.media-grid');
+  var items = grid.querySelectorAll('.media-card');
+  
+  for (var i = 0; i < items.length; i++) {
+    var rect = items[i].getBoundingClientRect();
+    var rowSpan = Math.ceil((rect.height + 12) / 10);
+    items[i].style.gridRowEnd = 'span ' + Math.max(1, rowSpan);
   }
-
-  function init() {
-    updateDebug('Initializing masonry...');
-    setTimeout(function() { masonryLayout(); }, 100);
-    setTimeout(function() { masonryLayout(); }, 1000);
-    setTimeout(function() { masonryLayout(); }, 3000);
-    setTimeout(function() { masonryLayout(); }, 6000);
-  }
-
-  // Start when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-
-  // Also run when window loads
-  window.addEventListener('load', function() {
-    updateDebug('Window loaded - running masonry');
-    setTimeout(function() { masonryLayout(); }, 500);
-  });
-
-})();
+  
+  document.getElementById('debug-info').innerHTML = 'Second masonry pass';
+}, 3000);
 </script>
 
 <script async src="https://www.instagram.com/embed.js"></script>
