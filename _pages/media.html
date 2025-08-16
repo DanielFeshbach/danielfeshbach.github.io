@@ -136,120 +136,111 @@ hide_captions: false
   {% endfor %}
 </section>
 
-<script async src="https://www.instagram.com/embed.js"></script>
 <script>
-let masonryAttempts = 0;
-let lastHeights = [];
+// Simplified version with error handling
+try {
+  let masonryAttempts = 0;
 
-function updateDebug(message) {
+  function updateDebug(message) {
+    try {
+      const debug = document.getElementById('debug-info');
+      if (debug) {
+        debug.innerHTML = `${message}<br>Time: ${new Date().toLocaleTimeString()}`;
+      }
+    } catch (e) {
+      console.error('Debug update error:', e);
+    }
+  }
+
+  // Test basic functionality first
+  updateDebug('Script loaded successfully');
+
+  function masonryLayout() {
+    try {
+      const grid = document.querySelector('.media-grid');
+      if (!grid) {
+        updateDebug('Grid not found');
+        return;
+      }
+      
+      const items = grid.querySelectorAll('.media-card');
+      masonryAttempts++;
+      
+      updateDebug(`Attempt ${masonryAttempts}: Found ${items.length} items`);
+      
+      const rowHeight = 10;
+      const gap = 12;
+      
+      // Reset all items
+      items.forEach(item => {
+        item.style.gridRowEnd = 'auto';
+      });
+      
+      // Force reflow
+      grid.offsetHeight;
+      
+      // Calculate row spans
+      items.forEach((item, index) => {
+        const rect = item.getBoundingClientRect();
+        const itemHeight = rect.height;
+        const rowSpan = Math.ceil((itemHeight + gap) / (rowHeight + gap));
+        item.style.gridRowEnd = `span ${Math.max(1, rowSpan)}`;
+      });
+      
+      updateDebug(`Attempt ${masonryAttempts}: Layout applied`);
+      
+    } catch (e) {
+      updateDebug(`Error in masonry: ${e.message}`);
+      console.error('Masonry error:', e);
+    }
+  }
+
+  // Simple initialization
+  function initMasonry() {
+    updateDebug('Initializing masonry...');
+    setTimeout(masonryLayout, 100);
+    setTimeout(masonryLayout, 500);
+    setTimeout(masonryLayout, 1000);
+    setTimeout(masonryLayout, 2000);
+    setTimeout(masonryLayout, 4000);
+  }
+
+  // Event listeners
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMasonry);
+  } else {
+    initMasonry();
+  }
+
+  window.addEventListener('load', () => {
+    updateDebug('Window loaded');
+    setTimeout(initMasonry, 200);
+  });
+
+  // Handle Instagram embeds if available
+  setTimeout(() => {
+    try {
+      if (window.instgrm && window.instgrm.Embeds) {
+        updateDebug('Processing Instagram embeds');
+        window.instgrm.Embeds.process();
+        setTimeout(masonryLayout, 2000);
+      }
+    } catch (e) {
+      updateDebug(`Instagram error: ${e.message}`);
+    }
+  }, 2000);
+
+  updateDebug('Script initialization complete');
+
+} catch (e) {
+  // Fallback error reporting
   const debug = document.getElementById('debug-info');
   if (debug) {
-    debug.innerHTML = `Attempt ${masonryAttempts}: ${message}<br>Time: ${new Date().toLocaleTimeString()}`;
+    debug.innerHTML = `Script error: ${e.message}`;
   }
+  console.error('Script initialization error:', e);
 }
-
-function masonryLayout() {
-  const grid = document.querySelector('.media-grid');
-  if (!grid) {
-    updateDebug('Grid not found');
-    return;
-  }
-  
-  const items = grid.querySelectorAll('.media-card');
-  const rowHeight = 10;
-  const gap = 12;
-  
-  masonryAttempts++;
-  
-  // Reset all items
-  items.forEach(item => {
-    item.style.gridRowEnd = 'auto';
-  });
-  
-  // Force reflow
-  grid.offsetHeight;
-  
-  // Wait a bit for content to settle, then calculate
-  setTimeout(() => {
-    const currentHeights = [];
-    
-    items.forEach((item, index) => {
-      const rect = item.getBoundingClientRect();
-      const itemHeight = rect.height;
-      currentHeights.push(itemHeight);
-      
-      const rowSpan = Math.ceil((itemHeight + gap) / (rowHeight + gap));
-      item.style.gridRowEnd = `span ${Math.max(1, rowSpan)}`;
-    });
-    
-    // Check if heights are still changing (content still loading)
-    const heightsChanged = JSON.stringify(currentHeights) !== JSON.stringify(lastHeights);
-    lastHeights = currentHeights.slice();
-    
-    updateDebug(`Heights changed: ${heightsChanged}, Max height: ${Math.max(...currentHeights)}px`);
-    
-    // If heights are still changing and we haven't tried too many times, try again
-    if (heightsChanged && masonryAttempts < 20) {
-      setTimeout(masonryLayout, 1000);
-    }
-  }, 100);
-}
-
-// More aggressive initialization for production
-function initMasonry() {
-  updateDebug('Starting masonry initialization');
-  
-  // Run immediately
-  masonryLayout();
-  
-  // Then run at multiple intervals to catch late-loading content
-  const delays = [100, 300, 500, 1000, 2000, 3000, 5000, 8000, 12000];
-  
-  delays.forEach(delay => {
-    setTimeout(() => {
-      masonryLayout();
-    }, delay);
-  });
-}
-
-// Multiple event listeners to catch different loading states
-document.addEventListener('DOMContentLoaded', () => {
-  updateDebug('DOM loaded');
-  initMasonry();
-});
-
-window.addEventListener('load', () => {
-  updateDebug('Window loaded');
-  setTimeout(initMasonry, 200);
-});
-
-// Instagram embed handling
-function handleInstagramEmbeds() {
-  if (window.instgrm && window.instgrm.Embeds) {
-    updateDebug('Processing Instagram embeds');
-    window.instgrm.Embeds.process();
-    setTimeout(masonryLayout, 1500); // Give embeds time to render
-  }
-}
-
-// Try to process Instagram embeds multiple times
-setTimeout(handleInstagramEmbeds, 1000);
-setTimeout(handleInstagramEmbeds, 3000);
-setTimeout(handleInstagramEmbeds, 6000);
-
-// Handle window resize
-window.addEventListener('resize', function() {
-  clearTimeout(window.resizeTimer);
-  window.resizeTimer = setTimeout(() => {
-    updateDebug('Window resized');
-    masonryLayout();
-  }, 300);
-});
-
-// Keep checking for new content periodically
-setInterval(() => {
-  if (masonryAttempts < 50) { // Don't run forever
-    masonryLayout();
-  }
-}, 5000);
 </script>
+
+<!-- Load Instagram script after our script -->
+<script async src="https://www.instagram.com/embed.js"></script>
