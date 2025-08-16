@@ -86,12 +86,13 @@ hide_captions: false
     position: fixed;
     top: 10px;
     right: 10px;
-    background: rgba(0,0,0,0.8);
+    background: rgba(255,0,0,0.9);
     color: white;
     padding: 10px;
     font-size: 12px;
     z-index: 9999;
     max-width: 300px;
+    border: 2px solid yellow;
   }
 </style>
 
@@ -99,7 +100,7 @@ hide_captions: false
 
 <!-- Debug info for production -->
 <div class="debug-info" id="debug-info">
-  Initializing...
+  HTML loaded
 </div>
 
 <section class="media-grid">
@@ -137,110 +138,72 @@ hide_captions: false
 </section>
 
 <script>
-// Simplified version with error handling
-try {
-  let masonryAttempts = 0;
-
+(function() {
+  var debug = document.getElementById('debug-info');
+  
   function updateDebug(message) {
-    try {
-      const debug = document.getElementById('debug-info');
-      if (debug) {
-        debug.innerHTML = `${message}<br>Time: ${new Date().toLocaleTimeString()}`;
-      }
-    } catch (e) {
-      console.error('Debug update error:', e);
+    if (debug) {
+      debug.innerHTML = message + '<br>Time: ' + new Date().toLocaleTimeString();
+      debug.style.background = 'rgba(0,255,0,0.9)'; // Green when working
     }
   }
 
-  // Test basic functionality first
-  updateDebug('Script loaded successfully');
+  updateDebug('JavaScript executing');
 
   function masonryLayout() {
-    try {
-      const grid = document.querySelector('.media-grid');
-      if (!grid) {
-        updateDebug('Grid not found');
-        return;
-      }
-      
-      const items = grid.querySelectorAll('.media-card');
-      masonryAttempts++;
-      
-      updateDebug(`Attempt ${masonryAttempts}: Found ${items.length} items`);
-      
-      const rowHeight = 10;
-      const gap = 12;
-      
-      // Reset all items
-      items.forEach(item => {
-        item.style.gridRowEnd = 'auto';
-      });
-      
-      // Force reflow
-      grid.offsetHeight;
-      
-      // Calculate row spans
-      items.forEach((item, index) => {
-        const rect = item.getBoundingClientRect();
-        const itemHeight = rect.height;
-        const rowSpan = Math.ceil((itemHeight + gap) / (rowHeight + gap));
-        item.style.gridRowEnd = `span ${Math.max(1, rowSpan)}`;
-      });
-      
-      updateDebug(`Attempt ${masonryAttempts}: Layout applied`);
-      
-    } catch (e) {
-      updateDebug(`Error in masonry: ${e.message}`);
-      console.error('Masonry error:', e);
+    var grid = document.querySelector('.media-grid');
+    if (!grid) {
+      updateDebug('ERROR: Grid not found');
+      return;
     }
+    
+    var items = grid.querySelectorAll('.media-card');
+    updateDebug('Processing ' + items.length + ' cards');
+    
+    var rowHeight = 10;
+    var gap = 12;
+    
+    // Reset all items
+    for (var i = 0; i < items.length; i++) {
+      items[i].style.gridRowEnd = 'auto';
+    }
+    
+    // Force reflow
+    grid.offsetHeight;
+    
+    // Apply masonry
+    for (var i = 0; i < items.length; i++) {
+      var rect = items[i].getBoundingClientRect();
+      var itemHeight = rect.height;
+      var rowSpan = Math.ceil((itemHeight + gap) / (rowHeight + gap));
+      items[i].style.gridRowEnd = 'span ' + Math.max(1, rowSpan);
+    }
+    
+    updateDebug('Masonry layout applied successfully');
   }
 
-  // Simple initialization
-  function initMasonry() {
+  function init() {
     updateDebug('Initializing masonry...');
-    setTimeout(masonryLayout, 100);
-    setTimeout(masonryLayout, 500);
-    setTimeout(masonryLayout, 1000);
-    setTimeout(masonryLayout, 2000);
-    setTimeout(masonryLayout, 4000);
+    setTimeout(function() { masonryLayout(); }, 100);
+    setTimeout(function() { masonryLayout(); }, 1000);
+    setTimeout(function() { masonryLayout(); }, 3000);
+    setTimeout(function() { masonryLayout(); }, 6000);
   }
 
-  // Event listeners
+  // Start when DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMasonry);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    initMasonry();
+    init();
   }
 
-  window.addEventListener('load', () => {
-    updateDebug('Window loaded');
-    setTimeout(initMasonry, 200);
+  // Also run when window loads
+  window.addEventListener('load', function() {
+    updateDebug('Window loaded - running masonry');
+    setTimeout(function() { masonryLayout(); }, 500);
   });
 
-  // Handle Instagram embeds if available
-  setTimeout(() => {
-    try {
-      if (window.instgrm && window.instgrm.Embeds) {
-        updateDebug('Processing Instagram embeds');
-        window.instgrm.Embeds.process();
-        setTimeout(masonryLayout, 2000);
-      }
-    } catch (e) {
-      updateDebug(`Instagram error: ${e.message}`);
-    }
-  }, 2000);
-
-  updateDebug('Script initialization complete');
-
-} catch (e) {
-  // Fallback error reporting
-  const debug = document.getElementById('debug-info');
-  if (debug) {
-    debug.innerHTML = `Script error: ${e.message}`;
-  }
-  console.error('Script initialization error:', e);
-}
+})();
 </script>
 
-<!-- Load Instagram script after our script -->
 <script async src="https://www.instagram.com/embed.js"></script>
