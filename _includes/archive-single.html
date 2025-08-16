@@ -12,6 +12,51 @@
   {% assign title = post.title %}
 {% endif %}
 
+<style>
+/* Responsive archive item styling */
+.archive__item-teaser img {
+  width: 300px;
+  height: auto;
+}
+
+/* Mobile responsive - scale down icons */
+@media (max-width: 768px) {
+  .archive__item-teaser img {
+    width: 80px !important;
+    max-width: 80px !important;
+  }
+  
+  .archive__item-content {
+    min-width: 0; /* Allow text to wrap */
+  }
+  
+  .archive__item-title {
+    font-size: 0.9rem !important;
+    line-height: 1.3 !important;
+  }
+  
+  .publication-meta {
+    font-size: 0.85rem !important;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .archive__item-teaser img {
+    width: 60px !important;
+    max-width: 60px !important;
+  }
+  
+  .archive__item-title {
+    font-size: 0.85rem !important;
+  }
+  
+  .publication-meta {
+    font-size: 0.8rem !important;
+  }
+}
+</style>
+
 <div class="{{ include.type | default: "list" }}__item">
   <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
     <div style="display: flex; align-items: center; gap: 15px;">
@@ -23,7 +68,7 @@
             {% else %}
               "{{ teaser | prepend: "/images/" | prepend: base_path }}"
             {% endif %}
-            alt="{{ title | default: post.title }}" style="width: 300px; height: auto;">
+            alt="{{ title | default: post.title }}">
         </div>
       {% endif %}
       <div class="archive__item-content" style="flex-grow: 1;">

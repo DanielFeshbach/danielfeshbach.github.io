@@ -16,6 +16,16 @@ hide_captions: false
     padding: 1rem !important;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
     margin-bottom: 1rem !important;
+    align-self: start !important;
+  }
+  
+  /* Grid with small row units for masonry effect */
+  .media-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+    grid-auto-rows: 10px !important; /* Smaller units for better fit */
+    gap: 0.75rem !important;
+    align-items: start !important;
   }
   
   /* Tighter spacing between elements */
@@ -34,7 +44,7 @@ hide_captions: false
 
 <h1>Media</h1>
 
-<section class="media-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:.75rem;align-items:start;">
+<section class="media-grid">
   {% assign media_items = site.media | sort: "date" | reverse %}
   {% for item in media_items %}
     <article class="media-card" style="border: 2px solid #ccc !important; background: #fff !important; padding: 1rem !important; border-radius: 8px !important; box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;">
@@ -70,7 +80,44 @@ hide_captions: false
 
 <script async src="https://www.instagram.com/embed.js"></script>
 <script>
-  window.addEventListener('load', function () {
-    if (window.instgrm && instgrm.Embeds) { instgrm.Embeds.process(); }
-  });
+window.addEventListener('load', function() {
+  function masonryLayout() {
+    const grid = document.querySelector('.media-grid');
+    const items = grid.querySelectorAll('.media-card');
+    const rowHeight = 10; // Must match grid-auto-rows
+    const gap = 12; // 0.75rem in pixels
+    
+    items.forEach(item => {
+      // Reset any previous spanning
+      item.style.gridRowEnd = 'auto';
+      
+      // Force layout calculation
+      const rect = item.getBoundingClientRect();
+      const height = rect.height;
+      
+      // Calculate how many 10px rows this item needs (including gap)
+      const rowSpan = Math.ceil((height + gap) / (rowHeight + gap));
+      
+      // Apply the span
+      item.style.gridRowEnd = `span ${rowSpan}`;
+    });
+  }
+  
+  // Run layout multiple times to ensure proper sizing
+  function runLayout() {
+    masonryLayout();
+    setTimeout(masonryLayout, 100);  // Run again after brief delay
+    setTimeout(masonryLayout, 500);  // And once more after embeds settle
+  }
+  
+  if (window.instgrm && instgrm.Embeds) { 
+    instgrm.Embeds.process();
+    setTimeout(runLayout, 2000); // Wait for Instagram embeds to load
+  } else {
+    runLayout();
+  }
+  
+  // Re-run layout on window resize
+  window.addEventListener('resize', runLayout);
+});
 </script>
