@@ -7,38 +7,78 @@ hide_captions: false
 ---
 
 <style>
-  /* Force card borders with maximum specificity */
-  .media-page .media-card {
+  /* Maximum specificity - target the exact page structure */
+  body .page__inner-wrap .media-page .media-card,
+  body .media-page .media-card,
+  .media-card {
     min-width: 0 !important;
     background: #fff !important;
-    border: 3px solid #333 !important;
+    border: 1px solid #e1e4e8 !important; /* Professional gray border */
     border-radius: 8px !important;
     padding: 1rem !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
-    margin-bottom: 1rem !important;
-    align-self: start !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important; /* Subtle shadow */
+    margin: 0 !important; /* Remove margin, let grid handle spacing */
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    transition: box-shadow 0.2s ease !important; /* Smooth hover effect */
   }
   
-  /* Grid with small row units for masonry effect */
+  /* Hover effect for cards */
+  .media-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+    border-color: #d1d5da !important;
+  }
+  
+  /* Grid container with tighter spacing */
+  body .media-page .media-grid,
   .media-grid {
     display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
-    grid-auto-rows: 10px !important; /* Smaller units for better fit */
-    gap: 0.75rem !important;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+    grid-auto-rows: 10px !important; /* Smaller row height for tighter packing */
+    gap: 12px !important; /* Slightly smaller gap */
     align-items: start !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 20px 0 !important;
   }
   
-  /* Tighter spacing between elements */
-  .media-page .media-card h3 { margin: 0.1rem 0 0.25rem; font-size: 1rem; }
-  .media-page .publication-meta { margin: 0 0 0.1rem !important; color: #666; font-size: 0.9rem; }
-  .media-page .media-summary { margin-top: 0.25rem; }
+  /* Ensure full width for default layout */
+  body .media-page {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 20px !important;
+  }
+  
+  /* Spacing with higher specificity */
+  .media-page .media-card h3,
+  body .media-card h3 { 
+    margin: 0 0 0.25rem !important; 
+    font-size: 1rem !important;
+    color: #333 !important;
+  }
+  
+  .media-page .publication-meta,
+  body .media-card .publication-meta { 
+    margin: 0 0 0.5rem !important; 
+    color: #666 !important; 
+    font-size: 0.9rem !important;
+  }
+  
+  .media-page .media-summary,
+  body .media-card .media-summary { 
+    margin-top: 0.5rem !important;
+    font-size: 0.9rem !important;
+  }
   
   /* Teaser image styling */
-  .media-page .media-card .teaser-image {
-    width: 100%;
-    height: auto;
-    border-radius: 4px;
-    margin-bottom: 0.5rem;
+  .media-page .media-card .teaser-image,
+  body .media-card .teaser-image {
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 4px !important;
+    margin-bottom: 0.5rem !important;
   }
 </style>
 
@@ -47,15 +87,15 @@ hide_captions: false
 <section class="media-grid">
   {% assign media_items = site.media | sort: "date" | reverse %}
   {% for item in media_items %}
-    <article class="media-card" style="border: 2px solid #ccc !important; background: #fff !important; padding: 1rem !important; border-radius: 8px !important; box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;">
+    <article class="media-card">
       
       {% if item.date %}
-        <p class="publication-meta" style="margin: 0 0 0.1rem !important;">
+        <p class="publication-meta">
           <time datetime="{{ item.date | date_to_xmlschema }}">{{ item.date | date: "%B %Y" }}</time>
         </p>
       {% endif %}
 
-      <h3 class="archive__item-title" style="margin: 0.1rem 0 0.25rem !important;">
+      <h3 class="archive__item-title">
         {% if item.link %}<a href="{{ item.link }}">{{ item.title }}</a>{% else %}{{ item.title }}{% endif %}
       </h3>
 
@@ -80,44 +120,70 @@ hide_captions: false
 
 <script async src="https://www.instagram.com/embed.js"></script>
 <script>
-window.addEventListener('load', function() {
-  function masonryLayout() {
-    const grid = document.querySelector('.media-grid');
-    const items = grid.querySelectorAll('.media-card');
-    const rowHeight = 10; // Must match grid-auto-rows
-    const gap = 12; // 0.75rem in pixels
+function masonryLayout() {
+  const grid = document.querySelector('.media-grid');
+  if (!grid) return;
+  
+  const items = grid.querySelectorAll('.media-card');
+  const rowHeight = 10; // Match the updated CSS grid-auto-rows
+  const gap = 12; // Match the updated CSS gap
+  
+  // First, reset all items to auto height
+  items.forEach(item => {
+    item.style.gridRowEnd = 'auto';
+  });
+  
+  // Force browser to recalculate layout
+  grid.offsetHeight;
+  
+  // Now calculate proper row spans for each item
+  items.forEach(item => {
+    const rect = item.getBoundingClientRect();
+    const itemHeight = rect.height;
     
-    items.forEach(item => {
-      // Reset any previous spanning
-      item.style.gridRowEnd = 'auto';
-      
-      // Force layout calculation
-      const rect = item.getBoundingClientRect();
-      const height = rect.height;
-      
-      // Calculate how many 10px rows this item needs (including gap)
-      const rowSpan = Math.ceil((height + gap) / (rowHeight + gap));
-      
-      // Apply the span
-      item.style.gridRowEnd = `span ${rowSpan}`;
-    });
-  }
+    // Calculate how many grid rows this item needs
+    const rowSpan = Math.ceil((itemHeight + gap) / (rowHeight + gap));
+    
+    // Apply the calculated row span
+    item.style.gridRowEnd = `span ${Math.max(1, rowSpan)}`;
+  });
+}
+
+// Enhanced initialization with better timing
+function initMasonry() {
+  // Multiple attempts with different delays to handle Instagram embeds
+  const delays = [50, 200, 500, 1000, 2000, 3000];
   
-  // Run layout multiple times to ensure proper sizing
-  function runLayout() {
-    masonryLayout();
-    setTimeout(masonryLayout, 100);  // Run again after brief delay
-    setTimeout(masonryLayout, 500);  // And once more after embeds settle
-  }
-  
+  delays.forEach(delay => {
+    setTimeout(() => {
+      masonryLayout();
+    }, delay);
+  });
+}
+
+// Wait for Instagram embeds to load
+window.addEventListener('load', function () {
   if (window.instgrm && instgrm.Embeds) { 
     instgrm.Embeds.process();
-    setTimeout(runLayout, 2000); // Wait for Instagram embeds to load
-  } else {
-    runLayout();
   }
   
-  // Re-run layout on window resize
-  window.addEventListener('resize', runLayout);
+  // Run masonry after a short delay to let embeds render
+  setTimeout(initMasonry, 100);
 });
+
+// Handle window resize
+window.addEventListener('resize', function() {
+  clearTimeout(window.resizeTimer);
+  window.resizeTimer = setTimeout(masonryLayout, 300);
+});
+
+// Initial load
+document.addEventListener('DOMContentLoaded', initMasonry);
+
+// Also try to run masonry when Instagram embeds finish loading
+if (window.instgrm) {
+  window.instgrm.Embeds.process().then(() => {
+    setTimeout(masonryLayout, 500);
+  });
+}
 </script>
