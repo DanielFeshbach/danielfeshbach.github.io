@@ -17,7 +17,7 @@ hide_captions: false
     border-radius: 8px !important;
     padding: 1rem !important;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-    margin: 0 !important;
+    margin: 0 0 15px 0 !important; /* Use margin instead of grid for vertical spacing */
     display: block !important;
     width: 100% !important;
     box-sizing: border-box !important;
@@ -30,14 +30,12 @@ hide_captions: false
     border-color: #d1d5da !important;
   }
   
-  /* Grid container with separate horizontal and vertical gaps */
+  /* Simplified grid - let CSS handle everything */
   body .media-page .media-grid,
   .media-grid {
     display: grid !important;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
-    grid-auto-rows: 20px !important; /* Row height for masonry calculation */
-    row-gap: 1px !important; /* Vertical gap between rows */
-    column-gap: 20px !important; /* Horizontal gap between columns */
+    column-gap: 20px !important; /* Only horizontal gap */
     align-items: start !important;
     width: 100% !important;
     max-width: none !important;
@@ -119,92 +117,22 @@ hide_captions: false
   {% endfor %}
 </section>
 
+<!-- Minimal JavaScript - only handle Instagram embeds -->
 <script>
-var lastHeights = [];
-var masonryAttempts = 0;
-var isStable = false;
-
-function applyMasonry() {
-  var grid = document.querySelector('.media-grid');
-  var items = grid.querySelectorAll('.media-card');
-  
-  var rowHeight = 20; // Match CSS grid-auto-rows
-  var verticalGap = 1; // Match CSS row-gap
-  
-  masonryAttempts++;
-  
-  // Check current heights first
-  var currentHeights = [];
-  for (var i = 0; i < items.length; i++) {
-    var rect = items[i].getBoundingClientRect();
-    currentHeights.push(rect.height);
-  }
-  
-  // Only proceed if heights have changed or this is the first run
-  var heightsChanged = JSON.stringify(currentHeights) !== JSON.stringify(lastHeights);
-  
-  if (!heightsChanged && masonryAttempts > 1) {
-    if (!isStable) {
-      isStable = true; // Mark as stable, stop periodic checks
-    }
-    return; // No need to recalculate
-  }
-  
-  lastHeights = currentHeights.slice();
-  
-  // Reset all items first
-  for (var i = 0; i < items.length; i++) {
-    items[i].style.gridRowEnd = 'auto';
-  }
-  
-  // Force reflow
-  grid.offsetHeight;
-  
-  // Wait for content to settle, then calculate
+// Handle Instagram embeds when they're ready
+if (window.instgrm) {
   setTimeout(function() {
-    for (var i = 0; i < items.length; i++) {
-      var rect = items[i].getBoundingClientRect();
-      var itemHeight = rect.height;
-      
-      var rowSpan = Math.ceil((itemHeight + verticalGap) / rowHeight);
-      items[i].style.gridRowEnd = 'span ' + rowSpan;
+    if (window.instgrm.Embeds) {
+      window.instgrm.Embeds.process();
     }
-  }, 100);
+  }, 1000);
 }
 
-// Initial load timing - less aggressive
-setTimeout(applyMasonry, 500);
-setTimeout(applyMasonry, 1500);
-setTimeout(applyMasonry, 3000);
-setTimeout(applyMasonry, 6000);
-
-window.addEventListener('resize', function() {
-  isStable = false; // Reset stability on resize
-  setTimeout(applyMasonry, 300);
-});
-
-// Handle Instagram embeds
-function handleInstagramEmbeds() {
+setTimeout(function() {
   if (window.instgrm && window.instgrm.Embeds) {
     window.instgrm.Embeds.process();
-    setTimeout(function() {
-      isStable = false; // Reset stability when Instagram loads
-      applyMasonry();
-    }, 2000);
   }
-}
-
-setTimeout(handleInstagramEmbeds, 2000);
-setTimeout(handleInstagramEmbeds, 5000);
-
-// Only check periodically if not stable, and less frequently
-var periodicCheck = setInterval(function() {
-  if (!isStable && masonryAttempts < 20) {
-    applyMasonry();
-  } else {
-    clearInterval(periodicCheck);
-  }
-}, 5000); // Every 5 seconds instead of 2
+}, 3000);
 </script>
 
 <script async src="https://www.instagram.com/embed.js"></script>
