@@ -30,13 +30,14 @@ hide_captions: false
     border-color: #d1d5da !important;
   }
   
-  /* Grid container with tighter spacing */
+  /* Grid container with separate horizontal and vertical gaps */
   body .media-page .media-grid,
   .media-grid {
     display: grid !important;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
-    grid-auto-rows: 10px !important;
-    gap: 12px !important;
+    grid-auto-rows: 20px !important; /* Row height for masonry calculation */
+    row-gap: 1px !important; /* Vertical gap between rows */
+    column-gap: 20px !important; /* Horizontal gap between columns */
     align-items: start !important;
     width: 100% !important;
     max-width: none !important;
@@ -80,25 +81,9 @@ hide_captions: false
     border-radius: 4px !important;
     margin-bottom: 0.5rem !important;
   }
-
-  /* Production debugging */
-  .debug-info {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: rgba(255,0,0,0.9);
-    color: white;
-    padding: 10px;
-    font-size: 12px;
-    z-index: 9999;
-    max-width: 300px;
-    border: 2px solid yellow;
-  }
 </style>
 
 <h1>Media</h1>
-
-<div class="debug-info" id="debug-info">HTML loaded</div>
 
 <section class="media-grid">
   {% assign media_items = site.media | sort: "date" | reverse %}
@@ -134,38 +119,56 @@ hide_captions: false
   {% endfor %}
 </section>
 
-<!-- Minimal test script -->
 <script>
-document.getElementById('debug-info').innerHTML = 'JS executing';
-document.getElementById('debug-info').style.background = 'rgba(0,255,0,0.9)';
-
-setTimeout(function() {
+function applyMasonry() {
   var grid = document.querySelector('.media-grid');
   var items = grid.querySelectorAll('.media-card');
   
-  document.getElementById('debug-info').innerHTML = 'Found ' + items.length + ' items';
+  var rowHeight = 20; // Match CSS grid-auto-rows
+  var verticalGap = 1; // Match CSS row-gap
+  var horizontalGap = 20; // Match CSS column-gap (not used in calculation)
   
+  // Reset all items first
   for (var i = 0; i < items.length; i++) {
-    var rect = items[i].getBoundingClientRect();
-    var rowSpan = Math.ceil((rect.height + 12) / 10);
-    items[i].style.gridRowEnd = 'span ' + Math.max(1, rowSpan);
+    items[i].style.gridRowEnd = 'auto';
   }
   
-  document.getElementById('debug-info').innerHTML = 'Masonry applied';
-}, 1000);
+  // Force reflow
+  grid.offsetHeight;
+  
+  // Calculate spans
+  setTimeout(function() {
+    for (var i = 0; i < items.length; i++) {
+      var rect = items[i].getBoundingClientRect();
+      var itemHeight = rect.height;
+      
+      // Only use vertical gap in calculation since that's what affects row spans
+      var rowSpan = Math.ceil((itemHeight + verticalGap) / rowHeight);
+      
+      items[i].style.gridRowEnd = 'span ' + rowSpan;
+    }
+  }, 100);
+}
 
-setTimeout(function() {
-  var grid = document.querySelector('.media-grid');
-  var items = grid.querySelectorAll('.media-card');
-  
-  for (var i = 0; i < items.length; i++) {
-    var rect = items[i].getBoundingClientRect();
-    var rowSpan = Math.ceil((rect.height + 12) / 10);
-    items[i].style.gridRowEnd = 'span ' + Math.max(1, rowSpan);
-  }
-  
-  document.getElementById('debug-info').innerHTML = 'Second masonry pass';
-}, 3000);
+// Apply masonry multiple times to handle loading content
+setTimeout(applyMasonry, 500);
+setTimeout(applyMasonry, 1500);
+setTimeout(applyMasonry, 3000);
+setTimeout(applyMasonry, 5000);
+
+window.addEventListener('resize', function() {
+  setTimeout(applyMasonry, 200);
+});
+
+// Handle Instagram embeds
+if (window.instgrm) {
+  setTimeout(function() {
+    if (window.instgrm.Embeds) {
+      window.instgrm.Embeds.process();
+      setTimeout(applyMasonry, 2000);
+    }
+  }, 1000);
+}
 </script>
 
 <script async src="https://www.instagram.com/embed.js"></script>
