@@ -66,6 +66,10 @@ hide_captions: false
     margin-bottom: 0.5rem !important;
   }
 
+  .media-embed {
+    position: relative !important;
+  }
+
   .media-embed iframe[src*="youtube"] {
     width: 100% !important;
     max-width: 100% !important;
@@ -74,7 +78,9 @@ hide_captions: false
   }
 
   .media-embed iframe:not([src*="youtube"]) {
+    width: 100% !important;
     max-width: 100% !important;
+    min-width: 0 !important;
   }
 </style>
 
@@ -172,6 +178,16 @@ hide_captions: false
     layoutTimer = setTimeout(fullLayout, 50);
   }
 
+  // Instagram's embed.js replaces the placeholder <blockquote> with a
+  // position:absolute <iframe> that starts at height:0 and is resized later
+  // via postMessage. An absolutely-positioned element doesn't affect its
+  // parent's height, so .media-card would never grow to fit it. Mirror the
+  // iframe's height onto its .media-embed wrapper (which is position:relative,
+  // so it's also the iframe's containing block) to reserve the right space.
+  function watchEmbedIframe(iframe, ro) {
+    ro.observe(iframe);
+  }
+
   function init() {
     fullLayout();
     var grid = document.querySelector('.media-grid');
@@ -185,12 +201,36 @@ hide_captions: false
       // iframes, or video metadata load and expand the card.
       var cardRO = new ResizeObserver(scheduleLayout);
       grid.querySelectorAll('.media-card').forEach(function (c) { cardRO.observe(c); });
+
+      var embedRO = new ResizeObserver(function (entries) {
+        entries.forEach(function (entry) {
+          var iframe = entry.target;
+          var wrapper = iframe.closest('.media-embed');
+          if (wrapper) wrapper.style.minHeight = iframe.offsetHeight + 'px';
+        });
+        scheduleLayout();
+      });
+      grid.querySelectorAll('.media-embed iframe').forEach(function (f) { watchEmbedIframe(f, embedRO); });
+
+      if (window.MutationObserver) {
+        new MutationObserver(function (mutations) {
+          mutations.forEach(function (m) {
+            m.addedNodes.forEach(function (node) {
+              if (node.nodeType !== 1) return;
+              if (node.tagName === 'IFRAME') watchEmbedIframe(node, embedRO);
+              if (node.querySelectorAll) {
+                node.querySelectorAll('iframe').forEach(function (f) { watchEmbedIframe(f, embedRO); });
+              }
+            });
+          });
+        }).observe(grid, { childList: true, subtree: true });
+      }
     }
 
     // Fallback re-layouts: third-party embeds (Instagram, YouTube) load async
     // and can replace their placeholder with a full-size iframe before the
-    // ResizeObservers above are attached, in which case that resize is never
-    // reported. These catch that case regardless of timing.
+    // observers above are attached, in which case that change may be missed.
+    // These catch that case regardless of timing.
     window.addEventListener('load', scheduleLayout);
     [500, 1500, 3000].forEach(function (ms) { setTimeout(fullLayout, ms); });
   }
