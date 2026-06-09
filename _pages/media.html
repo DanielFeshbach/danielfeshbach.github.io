@@ -79,6 +79,19 @@ hide_captions: false
     border-radius: 4px !important;
     margin-bottom: 0.5rem !important;
   }
+
+  /* YouTube iframes: responsive 16:9 */
+  .media-embed iframe[src*="youtube"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    aspect-ratio: 16 / 9 !important;
+    height: auto !important;
+  }
+
+  /* All other iframes (Instagram etc): just prevent horizontal overflow */
+  .media-embed iframe:not([src*="youtube"]) {
+    max-width: 100% !important;
+  }
 </style>
 
 <h1>Media</h1>
