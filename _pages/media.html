@@ -175,15 +175,24 @@ hide_captions: false
   function init() {
     fullLayout();
     var grid = document.querySelector('.media-grid');
-    if (!grid || !window.ResizeObserver) return;
+    if (!grid) return;
 
-    // Re-layout when grid width changes (column count may change on resize).
-    new ResizeObserver(scheduleLayout).observe(grid);
+    if (window.ResizeObserver) {
+      // Re-layout when grid width changes (column count may change on resize).
+      new ResizeObserver(scheduleLayout).observe(grid);
 
-    // Re-layout when any card changes height — fires when images, Instagram
-    // iframes, or video metadata load and expand the card.
-    var cardRO = new ResizeObserver(scheduleLayout);
-    grid.querySelectorAll('.media-card').forEach(function (c) { cardRO.observe(c); });
+      // Re-layout when any card changes height — fires when images, Instagram
+      // iframes, or video metadata load and expand the card.
+      var cardRO = new ResizeObserver(scheduleLayout);
+      grid.querySelectorAll('.media-card').forEach(function (c) { cardRO.observe(c); });
+    }
+
+    // Fallback re-layouts: third-party embeds (Instagram, YouTube) load async
+    // and can replace their placeholder with a full-size iframe before the
+    // ResizeObservers above are attached, in which case that resize is never
+    // reported. These catch that case regardless of timing.
+    window.addEventListener('load', scheduleLayout);
+    [500, 1500, 3000].forEach(function (ms) { setTimeout(fullLayout, ms); });
   }
 
   if (document.readyState === 'loading') {
