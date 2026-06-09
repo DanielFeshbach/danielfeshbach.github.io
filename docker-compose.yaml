@@ -5,4 +5,4 @@ services:
     volumes: [ .:/usr/src/app ]
     ports: [ 4000:4000 ]
     user: 1000:1000
-    command: jekyll serve -H 0.0.0.0 -w
+    command: bash -c "bundle exec jekyll build --config _config.yml,_config.dev.yml && (bundle exec jekyll build --config _config.yml,_config.dev.yml -w &) && ruby -run -e httpd _site -p 4000"

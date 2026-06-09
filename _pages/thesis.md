@@ -1,11 +1,8 @@
-A kinematic linkage is an assembly of joints connected together by approximately rigid structures called links - examples include arms, legs, and torsoes branching into multiple limbs. To restrict the design space to make it tractable to explore, we approximate link shapes as bent tubes. Depending on the context, these tubes can be the link shapes directly fabricated (as many real links are approximately tubular) or can be used as bounds within which to fine-tune shapes (e.g. with topology optimization).
+For my thesis I am developing computational tools for designing kinematic tree robots. A kinematic linkage is an assembly of joints connected together by approximately rigid structures called links - examples include arms, legs, and torsoes branching into multiple limbs.  My work involves representing linkages as bent tubes shaped along curvature-constrained (3D Dubins) paths. I show that this representation leads to a design space that is fully kinematically expressive while being simplified enough for feasible design exploration by algorithms and humans. Specifically, I work on:
 
-My thesis work has several areas:
+- Linear-time **design algorithms** mapping kinematic specifications to specific linkage shapes without self-intersection. These algorithms show the kinematic expressivity of the tubular design space, and more broadly prove the surprising result that it is possible to implement any sequence of axes of motion as a kinematic chain with no self-intersection in any well-defined configuration.  
+- **Gradient-based optimization** of curvature-constrained paths, used to take the results of the design algorithms and improve their compactness while preserving required non-self-intersection.
+- **Interactive design software** for non-experts to design kinematic trees via intuitive click-and-drag arrangement of joint modules, visualize potential motions, and export fabrication files for 3D printing or origami.
+- A study of **STEM identity formation in a high school robot design project**. As students use our interactive design software to prototype functional robots, we are interested in how feelings of customization agency over the design process, and personal ownership over the resulting designs, shape self-efficacy and STEM identity.
 
-- Guaranteed Shape Design Algorithms: these algorithms take as input a specification of a 3D mechanism's desired kinematics (axes of motion, joint types and sizes, which joint connects to which) and outputs the 
-
-- Joint Arrangement Optimization: 
-
-- Interactive Human-in-the-loop Design: 
-
-- Fabrication of Tubular Linkages:
+This research is part of a larger effort towards automating robot design in a staged, modular pipeline: our goal is to enable non-experts to design their own robots and to support engineers in rapidly creating custom robots to meet new needs.
