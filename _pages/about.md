@@ -1,12 +1,12 @@
 ---
 permalink: /
-title: "About me"
+title: "About Me"
 author_profile: true
 redirect_from: 
   - /about/
   - /about.html
 ---
-I am a PhD candidate (graduating Spring 2027) in the [Sung Robotics Lab](https://sung.seas.upenn.edu/) at the University of Pennsylvania. I am interested in the intersections of computational geometry, robot design, motion planning, human-computer interaction, and engineering education. My main long-term research questions are:
+I am a PhD candidate (graduating Spring 2027) in the [Sung Robotics Lab](https://sung.seas.upenn.edu/) at the University of Pennsylvania. I am interested in the intersections of **computational geometry, robot design, motion planning, human-computer interaction, and engineering education**. My main long-term research questions are:
 
 - What **geometric representations** best enable algorithms and humans to find mechanism designs and motion plans for robots?
 - How do non-experts (especially students) using 3D design software form **self-efficacy and identity** with engineering design?
