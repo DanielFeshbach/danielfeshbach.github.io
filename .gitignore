@@ -5,6 +5,9 @@ _site/
 # Ignore the directory for local files during development
 local/
 
+# Source media files too large to commit (e.g. videos hosted externally)
+videos/
+
 # Ignore the Gemfile that is generated
 Gemfile.lock
 

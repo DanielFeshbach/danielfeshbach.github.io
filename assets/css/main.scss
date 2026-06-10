@@ -82,59 +82,6 @@
   margin-bottom: 0.8em;
 }
 
-/* Clamp Instagram embeds by height on Media page */
-.media-page .embed-clamp {
-  max-height: 220px;        /* adjust as needed */
-  overflow: hidden;         /* clip the rest */
-  position: relative;
-}
-
-/* Ensure the blockquote/iframe don’t force width/spacing */
-.media-page .embed-clamp > blockquote.instagram-media {
-  max-width: 100% !important;
-  min-width: 0 !important;
-  width: 100% !important;
-  margin: 0.5em auto !important;
-}
-
-/* The iframe is injected by embed.js; keep it within the clamp */
-.media-page .embed-clamp iframe[src*="instagram.com"] {
-  display: block;
-  width: 100% !important;
-  height: auto !important;  /* let it grow; wrapper clips */
-}
-
-/* Control Instagram embed size via wrapper width (height scales with width) */
-.media-page .embed-wrap {
-  width: 100%;
-  max-width: 360px; /* default; can be overridden per item via inline style */
-  margin: 0.5em 0;
-}
-
-/* Ensure embedded elements fill the wrapper width */
-.media-page .embed-wrap .instagram-media,
-.media-page .embed-wrap iframe[src*="instagram.com"] {
-  width: 100% !important;
-  max-width: 100% !important;
-  display: block;
-}
-
-/* Limit only Instagram embeds; text remains full width */
-.media-page .archive__item .instagram-media,
-.media-page .archive__item iframe[src*="instagram.com"] {
-  display: block;
-  width: min(100%, var(--ig-max-width, 360px)) !important;
-  max-width: var(--ig-max-width, 360px) !important;
-  margin: 0.5em auto;
-}
-
-/* Ensure inner iframe fills the constrained container */
-.media-page .archive__item .instagram-media iframe {
-  width: 100% !important;
-  max-width: 100% !important;
-  height: auto;
-}
-
 /* Grid that shows multiple entries without vertical scrolling */
 .media-page .media-grid {
   display: grid;
@@ -158,25 +105,9 @@
   gap: 0.5rem;
 }
 
-/* Instagram embed fills card width; captions removed via template for compactness */
+/* Embed fills card width; captions removed via template for compactness */
 .media-page .media-card .media-embed {
   width: 100%;
-}
-
-/* Tame Instagram’s default min/max widths so embeds fit grid columns */
-.media-page .media-card .media-embed .instagram-media,
-.media-page .media-card .media-embed iframe[src*="instagram.com"] {
-  display: block;
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-}
-
-/* Ensure inner iframe stretches to container */
-.media-page .media-card .media-embed .instagram-media iframe {
-  width: 100% !important;
-  max-width: 100% !important;
-  height: auto;
 }
 
 /* Always apply to the media grid */
@@ -197,11 +128,101 @@
 /* Let grid items shrink */
 .media-card { min-width: 0; }
 
-/* Prevent Instagram CSS from enforcing a large min-width */
-.media-card .media-embed,
-.media-card .media-embed .instagram-media,
-.media-card .media-embed iframe[src*="instagram.com"] {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
+/* Static "looks like Instagram" card: header linking to the source account,
+   the media itself, and a link back to the original post. */
+.ig-card {
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.ig-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.75rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.ig-card-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7);
+  color: #fff;
+  font-size: 1rem;
+}
+
+.ig-card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ig-card-names {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  font-size: 0.875rem;
+}
+
+.ig-card-name {
+  font-weight: 600;
+}
+
+.ig-card-handle {
+  color: #8e8e8e;
+  font-size: 0.8rem;
+}
+
+.ig-card-media {
+  width: 100%;
+  line-height: 0;
+}
+
+.ig-card-media img,
+.ig-card-media video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Responsive wrapper for embedded iframes (e.g. a Google Drive video preview).
+   Set --ig-aspect (height / width as a percentage) to match the source media;
+   defaults to 16:9. */
+.ig-embed-responsive {
+  position: relative;
+  width: 100%;
+  padding-bottom: var(--ig-aspect, 56.25%);
+}
+
+.ig-embed-responsive iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.ig-card-link {
+  display: block;
+  padding: 0.6rem 0.75rem;
+  border-top: 1px solid #efefef;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #00376b;
+  text-decoration: none;
+}
+
+.ig-card-link:hover {
+  text-decoration: underline;
 }
