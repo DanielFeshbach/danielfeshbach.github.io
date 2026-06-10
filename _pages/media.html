@@ -15,10 +15,7 @@ classes: media-page
   .media-grid {
     display: grid !important;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
-    grid-auto-rows: 4px !important;
-    grid-auto-flow: row dense !important;
-    column-gap: 20px !important;
-    row-gap: 0 !important;
+    gap: 20px !important;
     align-items: start !important;
     width: 100% !important;
     margin: 20px 0 !important;
@@ -114,90 +111,3 @@ classes: media-page
     </article>
   {% endfor %}
 </section>
-
-<script>
-(function () {
-  var ROW = 4;   // must match grid-auto-rows (px)
-  var GAP = 20;  // desired card-to-card gap (px)
-
-  var layoutTimer = null;
-
-  function colCount(grid) {
-    return getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).length;
-  }
-
-  function spanCard(card) {
-    card.style.gridRowEnd = 'span ' + Math.ceil((card.offsetHeight + GAP) / ROW);
-  }
-
-  function fullLayout() {
-    var grid = document.querySelector('.media-grid');
-    if (!grid) return;
-    var cards = Array.from(grid.querySelectorAll('.media-card'));
-    var n = colCount(grid);
-    var colHeights = new Array(n).fill(0);
-
-    cards.forEach(function (card, i) {
-      var h = card.offsetHeight + GAP;
-      var col;
-
-      if (i < n) {
-        // First row: one card per column left-to-right.
-        col = i;
-      } else {
-        // Greedy: first column (left-to-right) where this card fits without
-        // raising the current max column height.
-        var maxH = Math.max.apply(null, colHeights);
-        col = -1;
-        for (var j = 0; j < n; j++) {
-          if (colHeights[j] + h <= maxH) { col = j; break; }
-        }
-        // If no column fits under the current max, use the shortest column.
-        if (col === -1) {
-          col = colHeights.reduce(function (best, _, idx) {
-            return colHeights[idx] < colHeights[best] ? idx : best;
-          }, 0);
-        }
-      }
-
-      colHeights[col] += h;
-      card.style.gridColumn = String(col + 1);
-      spanCard(card);
-    });
-  }
-
-  // Debounce so bursts of resize events (multiple iframes loading at once)
-  // only trigger one layout pass.
-  function scheduleLayout() {
-    clearTimeout(layoutTimer);
-    layoutTimer = setTimeout(fullLayout, 50);
-  }
-
-  function init() {
-    fullLayout();
-    var grid = document.querySelector('.media-grid');
-    if (!grid) return;
-
-    if (window.ResizeObserver) {
-      // Re-layout when grid width changes (column count may change on resize).
-      new ResizeObserver(scheduleLayout).observe(grid);
-
-      // Re-layout when any card changes height — fires when images or
-      // embedded videos load and expand the card.
-      var cardRO = new ResizeObserver(scheduleLayout);
-      grid.querySelectorAll('.media-card').forEach(function (c) { cardRO.observe(c); });
-    }
-
-    // Fallback re-layouts: images and embeds can finish loading after the
-    // observers above are attached.
-    window.addEventListener('load', scheduleLayout);
-    [500, 1500, 3000].forEach(function (ms) { setTimeout(fullLayout, ms); });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
-</script>
