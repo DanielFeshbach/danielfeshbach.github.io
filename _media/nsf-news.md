@@ -5,5 +5,7 @@ permalink: /media/nsf-news
 link: https://www.nsf.gov/news/folding-future-rise-origami-inspired-robots
 header:
   teaser: nsf_news.png
+  teaser_width: 1200
+  teaser_height: 468
 summary: "An [NSF News article](https://www.nsf.gov/news/folding-future-rise-origami-inspired-robots) features the Sung Robotics Lab's work on origami robotics, including the Kinegami and CurveQuad projects I'm part of."
 ---

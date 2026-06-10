@@ -105,7 +105,7 @@ classes: media-page
       {% endif %}
 
       {% if item.header.teaser %}
-        <img src="{{ site.baseurl }}/images/{{ item.header.teaser }}" alt="{{ item.title }}" class="teaser-image">
+        <img src="{{ site.baseurl }}/images/{{ item.header.teaser }}" alt="{{ item.title }}" class="teaser-image"{% if item.header.teaser_width %} width="{{ item.header.teaser_width }}" height="{{ item.header.teaser_height }}"{% endif %}>
       {% endif %}
 
       <div class="media-embed">

@@ -18,3 +18,6 @@ package-lock.json
 # Ignore the vendor file and bundle for alternative installation
 vendor/
 .bundle/
+
+# Ignore the file that tells it locally to use localhost:4000 for local development
+_config.dev.yml
