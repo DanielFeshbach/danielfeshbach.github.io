@@ -1,0 +1,34 @@
+{% comment %}
+  Static "looks like Instagram" card: header linking to the source account,
+  the actual media (image/video/iframe), and a link back to the original post.
+  No live embed.js, no like counts.
+
+  avatar is optional: filename in /images for the account's profile picture,
+  falls back to the Instagram glyph if omitted.
+
+  Usage:
+    {% capture ig_media %}<img src="..." alt="...">{% endcapture %}
+    {% include instagram-post.html
+       account_name="Display Name"
+       account_handle="handle"
+       avatar="account-logo.jpg"
+       post_url="https://www.instagram.com/p/..."
+       media=ig_media %}
+{% endcomment %}
+<div class="ig-card">
+  <a class="ig-card-header" href="{{ include.post_url }}" target="_blank" rel="noopener">
+    <span class="ig-card-avatar">
+      {% if include.avatar %}
+        <img src="{{ site.baseurl }}/images/{{ include.avatar }}" alt="">
+      {% else %}
+        <i class="fab fa-instagram" aria-hidden="true"></i>
+      {% endif %}
+    </span>
+    <span class="ig-card-names">
+      <span class="ig-card-name">{{ include.account_name }}</span>
+      {% if include.account_handle %}<span class="ig-card-handle">@{{ include.account_handle }}</span>{% endif %}
+    </span>
+  </a>
+  <div class="ig-card-media">{{ include.media }}</div>
+  <a class="ig-card-link" href="{{ include.post_url }}" target="_blank" rel="noopener">View on Instagram</a>
+</div>
