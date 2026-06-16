@@ -1,7 +1,7 @@
 ---
 title: "Iterator-Based Optimization of Imperfectly-Nested Loops"
 collection: publications
-permalink: /publication/iterator-optimization-ipdpsw-2018
+permalink: /publication/iterator-optimization-ipdpsw-2018/
 excerpt: 'An iterator-based approach for optimizing imperfectly-nested loops with runtime verification of correctness.'
 date: 2018-05-01
 venue: 'IEEE International Parallel and Distributed Processing Symposium Workshops (IPDPSW)'

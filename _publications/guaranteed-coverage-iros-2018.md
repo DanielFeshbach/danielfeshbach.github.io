@@ -1,7 +1,7 @@
 ---
 title: "Guaranteed Coverage with a Blind Unreliable Robot"
 collection: publications
-permalink: /publication/2018-guaranteed-coverage
+permalink: /publication/2018-guaranteed-coverage/
 excerpt: 'A planning approach for guaranteed coverage using a robot with minimal sensing and unreliable actions.'
 date: 2018-10-01
 venue: 'IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)'

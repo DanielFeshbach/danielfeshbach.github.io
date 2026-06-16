@@ -1,7 +1,7 @@
 ---
 title: "Algorithmic Design of Kinematic Trees Based on CSC Dubins Planning for Link Shapes"
 collection: publications
-permalink: /publication/kinematic-trees-wafr-2024
+permalink: /publication/kinematic-trees-wafr-2024/
 excerpt: 'A linear-time algorithm for designing tree-structured linkages with tubular links that avoid self-intersection in the neutral configuration.'
 date: 2024-10-08
 venue: 'Workshop on the Algorithmic Foundations of Robotics (WAFR)'

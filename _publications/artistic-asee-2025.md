@@ -1,7 +1,7 @@
 ---
 title: "Artistic Non-Inertial Tracer (ANT): an Educational Kit for a 3-Link Origami Slithering Robot"
 collection: publications
-permalink: /publication/artistic-asee-2025
+permalink: /publication/artistic-asee-2025/
 excerpt: 'An educational kit for a 3-link origami slithering robot that traces visually interesting patterns while moving.'
 date: 2025-06-22
 venue: 'American Society for Engineering Education (ASEE) Annual Conference and Exposition'

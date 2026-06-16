@@ -1,7 +1,7 @@
 ---
 title: "Kinegami: Open-source Software for Creating Kinematic Chains from Tubular Origami"
 collection: publications
-permalink: /publication/kinegami-python-osme-2024
+permalink: /publication/kinegami-python-osme-2024/
 excerpt: 'Open-source Python software for creating kinematic chains from tubular origami patterns.'
 date: 2024-07-16
 venue: '8th International Meeting on Origami in Science, Mathematics, and Education (8OSME)'

@@ -1,7 +1,7 @@
 ---
 title: "CurveQuad: A Centimeter-Scale Origami Quadruped that Leverages Curved Creases to Self-Fold and Crawl with One Motor"
 collection: publications
-permalink: /publication/curvequad-iros-2023
+permalink: /publication/curvequad-iros-2023/
 excerpt: 'A miniature curved origami quadruped that self-folds, unfolds, crawls, and steers using a single actuator.'
 date: 2023-10-01
 venue: 'IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)'
@@ -19,4 +19,4 @@ We present CurveQuad, a miniature curved origami quadruped that is able to self-
 
 [Publisher source](https://ieeexplore.ieee.org/document/10342339)
 
-<iframe width="1277" height="719" src="https://www.youtube.com/embed/RnSHG5F2Iek" title="CurveQuad Origami Quadruped: IROS 2023 Video Attachment (Extended)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="1277" height="719" src="https://www.youtube.com/embed/RnSHG5F2Iek" title="CurveQuad Origami Quadruped: IROS 2023 Video Attachment (Extended)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>

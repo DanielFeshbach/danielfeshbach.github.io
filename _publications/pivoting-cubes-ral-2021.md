@@ -1,7 +1,7 @@
 ---
 title: "Reconfiguring Non-Convex Holes in Pivoting Modular Cube Robots"
 collection: publications
-permalink: /publication/pivoting-cubes-ral-2021
+permalink: /publication/pivoting-cubes-ral-2021/
 excerpt: 'An algorithm for self-reconfiguration of 3D configurations of pivoting modular cube robots with arbitrary holes.'
 date: 2021-07-07
 venue: 'IEEE Robotics and Automation Letters'
@@ -15,4 +15,4 @@ We present an algorithm for self-reconfiguration of admissible 3D configurations
 
 [Paper available online](https://repository.upenn.edu/cis_papers/865/)
 
-<iframe width="818" height="460" src="https://www.youtube.com/embed/IoyFs_K5RNE" title="Reconfiguring Non-Convex Holes in Pivoting Modular Cube Robots: IROS 2021 prerecorded presentation." frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="818" height="460" src="https://www.youtube.com/embed/IoyFs_K5RNE" title="Reconfiguring Non-Convex Holes in Pivoting Modular Cube Robots: IROS 2021 prerecorded presentation." frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
